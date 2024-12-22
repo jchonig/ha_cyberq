@@ -13,18 +13,18 @@ _Integration to integrate with [BBQ Guru CyberQ Cloud and
 WiFi][ha_cyberq]._
 
 The BBQ Guru CyberQ Cloud and WiFi are discontinued products.
-Informatino can be found on the [BBQ Guru Support Pages][bbq_guru_support]
+Information about these controllers can be found on the [BBQ Guru Support Pages][bbq_guru_support]
 
 **This integration will set up the following platforms.**
 
 Platform | Description
-|-----------------|-------------------------------------|
-| `binary_sensor` | Show something `True` or `False`.   |
-| `number`        | Foo.                                |
-| `sensor`        | Show info from blueprint API.       |
-| `select`        | Foo.                                |
-| `switch`        | Switch something `True` or `False`. |
-| `text`          | Foo.                                |
+|-----------------|-----------------------------------------------------|
+| `binary_sensor` | Binary sensors                                      |
+| `number`        | Number based sesnors that can be set                |
+| `sensor`        | General sensors                                     |
+| `select`        | Sensors with a fixed set of options                 |
+| `switch`        | Sensors that can be turned on and off               |
+| `text`          | Sensors that are text strings (Cook and food names) |
 
 ## Installation
 
@@ -34,7 +34,8 @@ Platform | Description
 1. Download _all_ the files from the `custom_components/ha_cyberq/` directory (folder) in this repository.
 1. Place the files you downloaded in the new directory (folder) you created.
 1. Restart Home Assistant
-1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Integration blueprint"
+1. In the HA UI go to "Configuration" -> "Integrations" click "+" and
+   search for "CyberQ"
 
 ## Configuration is done in the UI
 
