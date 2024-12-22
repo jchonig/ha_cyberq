@@ -12,7 +12,14 @@ The [ha_cyberq] {% term integration %} is used to integrate the [BBQ
 Guru][bbq_guru] CyberQ Cloud and CyberQ WiFi automatic BBQ temperature controllers.
 
 The BBQ Guru CyberQ Cloud and WiFi are discontinued products.
-Information about these controllers can be found on the [BBQ Guru Support Pages][bbq_guru_support]
+Information about these controllers can be found on the [BBQ Guru
+Support Pages][bbq_guru_support]
+
+## Supported Devices
+
+Only the following devices are supported by this integration.
+- CyberQ Cloud firmware version 4.08
+- CyberQ Cloud firmware version 1.7
 
 **This integration will set up the following platforms.**
 
@@ -45,6 +52,20 @@ network in Infrastructure Mode.
    your CyberQ.
    
 {% include integrations/config_flow.md %}
+
+## Data updates
+
+This integration fetches data from the device every 5 seconds by
+default.
+The internal webserver of the CyberQ devices fetches data every 1
+second, however HomeAssistant has a lower limit on the update
+interval of 1 second.
+
+## Known limitations
+
+- The integration does not yet provide the ability to reboot, which can
+instead be done via the device web page.
+- The integration does not yet support setting the device timer.
 
 ## Removing the integration
 
