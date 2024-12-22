@@ -1,4 +1,4 @@
-# HomeAssistant Integration of BBQ Guru Cyberq Cloud and Cyberq WiFi
+# HomeAssistant Integration for BBQ Guru Cyberq Cloud and Cyberq WiFi
 
 [![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
@@ -18,13 +18,13 @@ Informatino can be found on the [BBQ Guru Support Pages][bbq_guru_support]
 **This integration will set up the following platforms.**
 
 Platform | Description
--- | --
-`binary_sensor` | Show something `True` or `False`.
-`number` | Foo.
-`sensor` | Show info from blueprint API.
-`select` | Foo.
-`switch` | Switch something `True` or `False`.
-`text` | Foo.
+|-----------------|-------------------------------------|
+| `binary_sensor` | Show something `True` or `False`.   |
+| `number`        | Foo.                                |
+| `sensor`        | Show info from blueprint API.       |
+| `select`        | Foo.                                |
+| `switch`        | Switch something `True` or `False`. |
+| `text`          | Foo.                                |
 
 ## Installation
 
