@@ -9,7 +9,11 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-_Integration to integrate with [BBQ Guru CyberQ Cloud and WiFi][ha_cyberq]._
+_Integration to integrate with [BBQ Guru CyberQ Cloud and
+WiFi][ha_cyberq]._
+
+The BBQ Guru CyberQ Cloud and WiFi are discontinued products.
+Informatino can be found on the [BBQ Guru Support Pages][bbq_guru_support]
 
 **This integration will set up the following platforms.**
 
@@ -42,6 +46,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 
 ***
 
+[bbq_guru_support]; https://www.bbqguru.com/support/
 [ha_cyberq]: https://github.com/jchonig/ha_cyberq
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jchonig/ha_cyberq.svg?style=for-the-badge
 [commits]: https://github.com/jchonig/ha_cyberq/commits/main
