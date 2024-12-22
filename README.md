@@ -16,14 +16,15 @@ Information about these controllers can be found on the [BBQ Guru Support Pages]
 
 **This integration will set up the following platforms.**
 
-| Platform        | Description                                         |
-|-----------------|-----------------------------------------------------|
-| `binary_sensor` | Binary sensors                                      |
-| `number`        | Number based sesnors that can be set                |
-| `sensor`        | General sensors                                     |
-| `select`        | Sensors with a fixed set of options                 |
-| `switch`        | Sensors that can be turned on and off               |
-| `text`          | Sensors that are text strings (Cook and food names) |
+| Platform        | CyberQ sensors supported                                                                                 |
+|-----------------|----------------------------------------------------------------------------------------------------------|
+| `binary_sensor` | `FAN_SHORTED`                                                                                            |
+| `climate`       | `COOK_TEMP`, `COOK_SET`, `FOOD1_TEMP`, `FOOD1_SET`, `FOOD2_TEMP`, `FOOD2_SET`, `FOOD3_TEMP`, `FOOD3_SET` |
+| `number`        | `COOK_PROPBAND`, `COOK_CYCTIME`, `ALARMDEV`, `LCD_BACKLIGHT`, `LCD_CONTRAST`, `COOKHOLD`                 |
+| `select`        | `COOK_RAMP`, `DEG_UNITS`, `ALARM_BEEPS`, `TIMEOUT_ACTION`                                                |
+| `sensor`        | `FAN_SPEED`, `COOK_STATUS`, `FOOD1_STATUS`, `FOOD2_STATUS`, `FOOD3_STATUS`, `TIMER_STATUS`, `TIMER_CURR` |
+| `switch`        | `OPENDETECT`, `MENU_SCROLLING`, `KEY_BEEPS`                                                              |
+| `text`          | `COOK_NAME`, `FOOD1_NAME`, `FOOD2_NAME`, `FOOD3_NAME`                                                    |
 
 ## Installation
 
