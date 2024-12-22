@@ -8,7 +8,8 @@
 
 [![Community Forum][forum-shield]][forum]
 
-_Integration to integrate with [BBQ Guru CyberQ Cloud and WiFi][ha_cyberq]._
+The [ha_cyberq] {% term integration %} is used to integrate the [BBQ
+Guru][bbq_guru] CyberQ Cloud and CyberQ WiFi automatic BBQ temperature controllers.
 
 The BBQ Guru CyberQ Cloud and WiFi are discontinued products.
 Information about these controllers can be found on the [BBQ Guru Support Pages][bbq_guru_support]
@@ -34,7 +35,23 @@ Information about these controllers can be found on the [BBQ Guru Support Pages]
 1. Restart Home Assistant
 1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "CyberQ"
 
-## Configuration is done in the UI
+## Prerequisites
+
+1. Follow the instructions for your device found on the [BBQ Guru
+Support Pages][bbq_guru_support] to connect your device to your WiFi
+network in Infrastructure Mode.
+1. Make note of the IP address and port number (defaults to 80) of
+   your CyberQ.
+   
+{% include integrations/config_flow.md %}
+
+## Removing the integration
+
+This integration follows standard integration removal. No extra steps are required.
+
+{% include integrations/remove_device_service.md %}
+
+After deleting the integration, go to the app of the manufacturer and remove the Home Assistant integration from there as well.
 
 <!---->
 
@@ -44,6 +61,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 
 ***
 
+[bbq_guru]: https://www.bbqguru.com
 [bbq_guru_support]: https://www.bbqguru.com/support/
 [ha_cyberq]: https://github.com/jchonig/ha_cyberq
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jchonig/ha_cyberq?style=for-the-badge
