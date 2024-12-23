@@ -11,5 +11,5 @@
   "requirements": ["xmltodict==0.13.0"],
   "ssdp": [],
   "zeroconf": [],
-  "version": "0.1"
+  "version": "0.3"
 }
