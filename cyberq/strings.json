@@ -1,0 +1,109 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]",
+          "port": "[%key:common::config_flow::data::port%]"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "fan_shorted": {
+        "name": "Fan output shorted"
+      }
+    },
+    "climate": {
+      "probe": {
+        "name": "{cook_name} probe",
+        "state": {
+          "off": "Off",
+          "heat": "Cook"
+        }
+      }
+    },
+    "number": {
+      "cook_propband": {
+        "name": "Proportional band"
+      },
+      "cook_cyctime": {
+        "name": "Fan cycle time"
+      },
+      "cook_hold": {
+        "name": "Timer hold temperature"
+      },
+      "alarmdev": {
+        "name": "Alarm deviation"
+      },
+      "lcd_backlight": {
+        "name": "LCD backlight"
+      },
+      "lcd_contrast": {
+        "name": "LCD contrast"
+      }
+    },
+    "sensor": {
+      "cook_status": {
+        "name": "{cook_name} status",
+        "state": {
+          "ok": "ok",
+          "high": "high",
+          "low": "low",
+          "done": "done",
+          "error": "error",
+          "hold": "hold",
+          "alarm": "alarm",
+          "shutdown": "shutdown"
+        }
+      },
+      "fan_speed": {
+        "name": "Fan speed"
+      },
+      "timer_status": {
+        "name": "Timer status"
+      },
+      "timer_curr": {
+        "name": "Timer remaining"
+      }
+    },
+    "select": {
+      "cook_ramp": {
+        "name": "Ramp Probe"
+      },
+      "deg_units": {
+        "name": "Display Degree units"
+      },
+      "alarm_beeps": {
+        "name": "Alarm beeps"
+      },
+      "timeout_action": {
+        "name": "Timeout action"
+      }
+    },
+    "switch": {
+      "opendetect": {
+        "name": "Open detect"
+      },
+      "menu_scrolling": {
+        "name": "LCD menu scrolling"
+      },
+      "key_beeps": {
+        "name": "Key beeps"
+      }
+    },
+    "text": {
+      "probe": {
+        "name": "{probe_name} Name"
+      }
+    }
+  }
+}
