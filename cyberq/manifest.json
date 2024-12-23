@@ -4,7 +4,7 @@
   "codeowners": ["@jchonig"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/cyberq",
+  "documentation": "https://github.com/jchonig/ha_cyberq",
   "homekit": {},
   "integration_type": "device",
   "iot_class": "local_polling",
