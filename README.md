@@ -1,4 +1,4 @@
-# HomeAssistant Integration for BBQ Guru Cyberq Cloud and Cyberq WiFi
+# ![Logo][logo] HomeAssistant Integration for BBQ Guru Cyberq Cloud and Cyberq WiFi
 
 [![GitHub Release][releases-shield]][releases]
 [![GitHub Activity][commits-shield]][commits]
@@ -110,14 +110,15 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 
 [bbq_guru]: https://www.bbqguru.com
 [bbq_guru_support]: https://www.bbqguru.com/support/
-[ha_cyberq]: https://github.com/jchonig/ha_cyberq
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jchonig/ha_cyberq?style=for-the-badge
 [commits]: https://github.com/jchonig/ha_cyberq/commits/main
-[issues]: https://github.com/jchonig/ha_cyberq/issues
 [exampleimg]: example.png
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
-[forum]: https://community.home-assistant.io/
+[forum]: https://community.home-assistant.io/t/cyberq-bbq-guru-cyberq-cloud-and-wi-fi-integration/815570
+[ha_cyberq]: https://github.com/jchonig/ha_cyberq
+[issues]: https://github.com/jchonig/ha_cyberq/issues
 [license-shield]: https://img.shields.io/github/license/jchonig/ha_cyberq.svg?style=for-the-badge
+[logo]: https://brands.home-assistant.io/cyberq/icon.png
 [maintenance-shield]: https://img.shields.io/badge/maintainer-Jeffrey%20Honig%20%40jchonig-blue.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/jchonig/ha_cyberq.svg?style=for-the-badge
 [releases]: https://github.com/jchonig/ha_cyberq/releases
