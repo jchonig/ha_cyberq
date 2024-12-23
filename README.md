@@ -89,6 +89,17 @@ This integration follows standard integration removal. No extra steps are requir
 
 After deleting the integration, go to the app of the manufacturer and remove the Home Assistant integration from there as well.
 
+## Screenshots
+
+- Sample dashboard
+![Sample Dashboard](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Dashboard.png)
+- Setting pit target temperature
+![Setting Pit Target Temperature](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Temperature.png)
+- Setting probe name
+![Setting Probe Name](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Name.png)
+- Selecting food for ramp function
+![Selecting Ramp Food](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Ramp.png)
+
 <!---->
 
 ## Contributions are welcome!
