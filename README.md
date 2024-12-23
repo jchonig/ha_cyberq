@@ -35,13 +35,26 @@ Only the following devices are supported by this integration.
 
 ## Installation
 
+### The easy way
+
+Add this repository to your HACS with the following button:
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=jchonig&repository=ha_cyberq&category=integration)
+
+Install this integration with the follwing button:
+
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=cyberq)
+
+### Manual installation
+
 1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 1. If you do not have a `custom_components` directory (folder) there, you need to create it.
 1. In the `custom_components` directory (folder) create a new folder called `ha_cyberq`.
 1. Download _all_ the files from the `custom_components/ha_cyberq/` directory (folder) in this repository.
 1. Place the files you downloaded in the new directory (folder) you created.
 1. Restart Home Assistant
-1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "CyberQ"
+1. In the HA UI go to "Configuration" -> "Integrations" click "+" and
+   search for "CyberQ"
 
 ## Prerequisites
 
