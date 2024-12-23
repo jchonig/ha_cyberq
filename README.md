@@ -8,12 +8,15 @@
 
 [![Community Forum][forum-shield]][forum]
 
-The [ha_cyberq] {% term integration %} is used to integrate the [BBQ
+The [ha_cyberq] integration is used to integrate the [BBQ
 Guru][bbq_guru] CyberQ Cloud and CyberQ WiFi automatic BBQ temperature controllers.
 
 The BBQ Guru CyberQ Cloud and WiFi are discontinued products.
 Information about these controllers can be found on the [BBQ Guru
 Support Pages][bbq_guru_support]
+
+This integration aims to enable complete control of these temperature
+controllers as well as replace the need for the BBQ Guru Cloud.
 
 ## Supported Devices
 
@@ -76,9 +79,7 @@ interval of 1 second.
 
 ## Known limitations
 
-- The integration does not yet provide the ability to reboot, which can
-instead be done via the device web page.
-- The integration does not yet support setting the device timer.
+See [Issues][issues]
 
 ## Removing the integration
 
@@ -101,6 +102,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [ha_cyberq]: https://github.com/jchonig/ha_cyberq
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jchonig/ha_cyberq?style=for-the-badge
 [commits]: https://github.com/jchonig/ha_cyberq/commits/main
+[issues]: https://github.com/jchonig/ha_cyberq/issues
 [exampleimg]: example.png
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
