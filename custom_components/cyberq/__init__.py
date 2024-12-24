@@ -32,7 +32,6 @@ type CyberqConfigEntry = ConfigEntry[CyberqDataUpdateCoordinator]
 
 async def async_setup_entry(hass: HomeAssistant, entry: CyberqConfigEntry) -> bool:
     """Set up BBQ Guru CyberQ Integration from a config entry."""
-
     coordinator = CyberqDataUpdateCoordinator(
         hass,
         CyberqDevice(

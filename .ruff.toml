@@ -10,10 +10,20 @@ select = [
 ignore = [
     "ANN101", # Missing type annotation for `self` in method
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+    "ARG001",
+    "ARG002",
+    "COM812", # incompatible with formatter
     "D203", # no-blank-line-before-class (incompatible with formatter)
     "D212", # multi-line-summary-first-line (incompatible with formatter)
-    "COM812", # incompatible with formatter
+    "EM102",
     "ISC001", # incompatible with formatter
+    "N818",
+    "PLR0912",
+    "PLR0913",
+    "TC001",
+    "TC002",
+    "TC003",
+    "TRY003",
 ]
 
 [lint.flake8-pytest-style]

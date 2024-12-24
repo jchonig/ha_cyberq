@@ -24,7 +24,6 @@ async def async_get_config_entry_diagnostics(
     config_entry: CyberqConfigEntry,
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
-
     cyberq = config_entry.runtime_data.cyberq
 
     _excluded_keys = set(CyberqSensor.__dict__.keys())

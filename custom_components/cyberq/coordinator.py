@@ -1,7 +1,7 @@
 """Coordinator for CyberQ integration."""
 
-from asyncio import timeout
 import logging
+from asyncio import timeout
 from xml.parsers.expat import ExpatError
 
 from homeassistant.core import HomeAssistant
@@ -21,7 +21,6 @@ class CyberqDataUpdateCoordinator(DataUpdateCoordinator[CyberqSensors]):
 
     def __init__(self, hass: HomeAssistant, cyberq: CyberqDevice) -> None:
         """Initialize."""
-
         super().__init__(
             hass,
             _LOGGER,
@@ -34,7 +33,6 @@ class CyberqDataUpdateCoordinator(DataUpdateCoordinator[CyberqSensors]):
 
     async def _async_update_data(self) -> CyberqSensors:
         """Update data via library."""
-
         try:
             async with timeout(20):
                 data = await self._device.async_update()

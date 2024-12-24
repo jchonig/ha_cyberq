@@ -101,6 +101,7 @@ class CyberqNumber(CoordinatorEntity[CyberqDataUpdateCoordinator], NumberEntity)
     def __init__(
         self,
         coordinator: CyberqDataUpdateCoordinator,
+        *,
         icon: str,
         cyberq_name_key: str,
         step: float,

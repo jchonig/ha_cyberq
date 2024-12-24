@@ -7,7 +7,6 @@ from typing import Any
 
 import aiohttp
 import voluptuous as vol
-
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import HomeAssistant
@@ -28,11 +27,11 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
-    """Validate the user input allows us to connect.
+    """
+    Validate the user input allows us to connect.
 
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
-
     cyberq = CyberqDevice(
         host=data[CONF_HOST],
         session=async_get_clientsession(hass),

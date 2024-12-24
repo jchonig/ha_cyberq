@@ -81,7 +81,7 @@ class CyberqClimate(CoordinatorEntity[CyberqDataUpdateCoordinator], ClimateEntit
     _attr_should_poll = False
     _attr_hvac_action = None
     _attr_hvac_mode = HVACMode.HEAT
-    _attr_hvac_modes = [HVACMode.HEAT]
+    _attr_hvac_modes = HVACMode.HEAT
     _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE
     _attr_prescision = PRECISION_TENTHS
     _attr_temperature_unit = UnitOfTemperature.FAHRENHEIT

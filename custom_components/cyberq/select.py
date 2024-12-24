@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import logging
+from collections.abc import Mapping
 
 from homeassistant.components.select import SelectEntity
 from homeassistant.const import EntityCategory
@@ -75,6 +75,7 @@ class CyberqSelect(CoordinatorEntity[CyberqDataUpdateCoordinator], SelectEntity)
     def __init__(
         self,
         coordinator: CyberqDataUpdateCoordinator,
+        *,
         cyberq_name_key: str,
         icon: str,
         key: str,

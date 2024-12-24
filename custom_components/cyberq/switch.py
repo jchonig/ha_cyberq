@@ -65,6 +65,7 @@ class CyberqSwitch(CoordinatorEntity[CyberqDataUpdateCoordinator], SwitchEntity)
     def __init__(
         self,
         coordinator: CyberqDataUpdateCoordinator,
+        *,
         key: str,
         icon: str,
         cyberq_name_key: str,

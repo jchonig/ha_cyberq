@@ -1,4 +1,5 @@
-"""Monitor BBQ Guru CyberQ.
+"""
+Monitor BBQ Guru CyberQ.
 
 MIT License
 
@@ -26,12 +27,12 @@ SOFTWARE.
 import asyncio
 import copy
 import datetime
-from enum import StrEnum
 import logging
 import re
 import sys
-from typing import Any, Final, Self
 import urllib.parse
+from enum import StrEnum
+from typing import Any, Final, Self
 
 import aiohttp
 import xmltodict
@@ -64,12 +65,13 @@ class CyberqSensor:
 
     _value: Any
     values: Any
-    min: Any
-    max: Any
+    min_value: Any
+    max_value: Any
 
     def __init__(
         self,
         name: str,
+        *,
         alias: str | None = None,
         read_only: bool = False,
         page: Page | None = None,
@@ -84,7 +86,6 @@ class CyberqSensor:
 
     def __str__(self) -> str:
         """Return a string representation of the sensor."""
-
         return f"Name: {self.name} Type: {type(self).__name__} Value: {self.value}"
 
     def __eq__(self, other: object) -> bool:
@@ -127,7 +128,6 @@ class CyberqSensorBoolean(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
@@ -143,6 +143,7 @@ class CyberqSensorList(CyberqSensor):
     def __init__(
         self,
         name: str,
+        *,
         values: list[str],
         alias: str | None = None,
         read_only: bool = False,
@@ -162,7 +163,6 @@ class CyberqSensorList(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
@@ -170,8 +170,10 @@ class CyberqSensorList(CyberqSensor):
 
     def __str__(self) -> str:
         """Return a string representation of the sensor."""
-
-        return f"Name: {self.name} Type: {type(self).__name__} Value: {self.value} Index: {self.index}"
+        return (
+            f"Name: {self.name} Type: {type(self).__name__} "
+            r"Value: {self.value} Index: {self.index}"
+        )
 
     @property
     def value(self) -> str:
@@ -187,16 +189,17 @@ class CyberqSensorNumber(CyberqSensor):
     def __init__(
         self,
         name: str,
-        min: float,
-        max: float,
+        *,
+        min_value: float,
+        max_value: float,
         alias: str | None = None,
         read_only: bool = False,
         page: Page | None = None,
     ) -> None:
         """Init a CyberQ number value."""
         super().__init__(name=name, alias=alias, read_only=read_only, page=page)
-        self.min = min
-        self.max = max
+        self.min_value = min_value
+        self.max_value = max_value
 
     def accept(self, value: Any) -> Self:
         """Import a value from device."""
@@ -205,11 +208,10 @@ class CyberqSensorNumber(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
-        if value < self.min or value > self.max:
+        if value < self.min_value or value > self.max_value:
             raise ValueError(f"Invalid value for {self.name}: {value}")
         return value
 
@@ -226,7 +228,6 @@ class CyberqSensorString(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
@@ -242,7 +243,6 @@ class CyberqSensorTimer(CyberqSensor):
 
     def accept(self, value: Any) -> Self:
         """Import a value from device."""
-
         match = self._TIMER_RE.match(value)
         if not match:
             raise ValueError(f"Invalid timer value for {self.name}: {value}")
@@ -251,7 +251,6 @@ class CyberqSensorTimer(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
@@ -262,8 +261,8 @@ class CyberqSensorTemperature(CyberqSensor):
     """Description of a CyberQ temperature sensor."""
 
     _value: float
-    min = CYBERQ_TEMPERATURE_MIN
-    max = CYBERQ_TEMPERATURE_MAX
+    min_value = CYBERQ_TEMPERATURE_MIN
+    max_value = CYBERQ_TEMPERATURE_MAX
 
     def accept(self, value: Any) -> Self:
         """Import a value from device."""
@@ -275,11 +274,10 @@ class CyberqSensorTemperature(CyberqSensor):
 
     def export(self, value: Any) -> Any:
         """Prep the value for setting on the device."""
-
         if self.read_only:
             raise ValueError(f"Read only value for {self.name}")
 
-        if value < self.min or value > self.max:
+        if value < self.min_value or value > self.max_value:
             raise ValueError(f"Invalid value for {self.name}: {value}")
         return int(value)
 
@@ -302,23 +300,23 @@ CYBERQ_SENSORS: Final = {
     "ALARMDEV": CyberqSensorNumber(
         "ALARMDEV",
         page=Page.CONTROL,
-        min=CYBERQ_ALARMDEV_MIN,
-        max=CYBERQ_ALARMDEV_MAX,
+        min_value=CYBERQ_ALARMDEV_MIN,
+        max_value=CYBERQ_ALARMDEV_MAX,
     ),
     "COOK_CYCTIME": CyberqSensorNumber(
         "COOK_CYCTIME",
         alias="CYCTIME",
         page=Page.INDEX,
-        min=CYBERQ_CYCLETIME_MIN,
-        max=CYBERQ_CYCLETIME_MAX,
+        min_value=CYBERQ_CYCLETIME_MIN,
+        max_value=CYBERQ_CYCLETIME_MAX,
     ),
     "COOK_NAME": CyberqSensorString("COOK_NAME", page=Page.INDEX),
     "COOK_PROPBAND": CyberqSensorNumber(
         "COOK_PROPBAND",
         alias="PROPBAND",
         page=Page.INDEX,
-        min=CYBERQ_PROPBAND_MIN,
-        max=CYBERQ_PROPBAND_MAX,
+        min_value=CYBERQ_PROPBAND_MIN,
+        max_value=CYBERQ_PROPBAND_MAX,
     ),
     "COOK_RAMP": CyberqSensorList(
         "COOK_RAMP",
@@ -357,19 +355,19 @@ CYBERQ_SENSORS: Final = {
     "LCD_BACKLIGHT": CyberqSensorNumber(
         "LCD_BACKLIGHT",
         page=Page.SYSTEM,
-        min=CYBERQ_LCD_MIN,
-        max=CYBERQ_LCD_MAX,
+        min_value=CYBERQ_LCD_MIN,
+        max_value=CYBERQ_LCD_MAX,
     ),
     "LCD_CONTRAST": CyberqSensorNumber(
         "LCD_CONTRAST",
         page=Page.SYSTEM,
-        min=CYBERQ_LCD_MIN,
-        max=CYBERQ_LCD_MAX,
+        min_value=CYBERQ_LCD_MIN,
+        max_value=CYBERQ_LCD_MAX,
     ),
     "MENU_SCROLLING": CyberqSensorBoolean("MENU_SCROLLING", page=Page.SYSTEM),
     "OPENDETECT": CyberqSensorBoolean("OPENDETECT", page=Page.CONTROL),
     "OUTPUT_PERCENT": CyberqSensorNumber(
-        "OUTPUT_PERCENT", min=0, max=100, read_only=True
+        "OUTPUT_PERCENT", min_value=0, max_value=100, read_only=True
     ),
     "TIMEOUT_ACTION": CyberqSensorList(
         "TIMEOUT_ACTION",
@@ -389,7 +387,7 @@ class CyberqSensors:
     _NAME_RE = re.compile(r"(COOK|FOOD[123])_NAME$")
     _TEMP_RE = re.compile(r"(COOK|FOOD[123])_(SET|TEMP)$")
     _STATUS_RE = re.compile(r"(COOK|FOOD[123]|TIMER)_STATUS$")
-    _STATUS = ["OK", "HIGH", "LOW", "DONE", "ERROR", "HOLD", "ALARM", "SHUTDOWN"]
+    _STATUS = ("OK", "HIGH", "LOW", "DONE", "ERROR", "HOLD", "ALARM", "SHUTDOWN")
     _TIMER_RE = re.compile(r"^(?P<hours>\d{2}):(?P<minutes>\d{2}):(?P<seconds>\d{2})$")
 
     def __init__(self) -> None:
@@ -397,7 +395,8 @@ class CyberqSensors:
         self._sensors: dict[str, Any] = {}
 
     def __deepcopy__(self, memo: Any) -> Any:
-        """Deep copy.
+        """
+        Deep copy.
 
         Prevents __getattr__ from recursing as new struct is created.
         """
@@ -407,7 +406,6 @@ class CyberqSensors:
 
     def __eq__(self, other: object) -> bool:
         """Compare."""
-
         if not isinstance(other, CyberqSensors):
             return False
 
@@ -415,14 +413,12 @@ class CyberqSensors:
 
     def __getattr__(self, key: str) -> Any:
         """Retrieve a sensor value."""
-
         if key in self._sensors:
             return self._sensors[key]
         raise AttributeError(f"CyberqSensor: Invalid key: {key}")
 
     def accept(self, key: str, value: str) -> None:
         """Set a value read from device, convert as needed."""
-
         if key not in CYBERQ_SENSORS:
             for sensor in CYBERQ_SENSORS.values():
                 if sensor.alias == key:
@@ -436,7 +432,6 @@ class CyberqSensors:
 
     def __str__(self) -> str:
         """Return a string representation of the sensors."""
-
         return "\n\t".join(
             [f"{key}={value}" for key, value in sorted(self._sensors.items())]
         )
@@ -451,19 +446,17 @@ class CyberqDevice:
     """Monitor a BBQ Guru CyberQ."""
 
     _PARSE_VALUE_RE = re.compile(
-        r"\s*document\.mainForm\.(?P<key>[A-Z1-3]+(_[A-Z]+)?)\.(selectedIndex|value) = (?P<value>[^;]+);$"
+        r"\s*document\.mainForm\.(?P<key>[A-Z1-3]+(_[A-Z]+)?)\.(selectedIndex|value)"
+        r" = (?P<value>[^;]+);$"
     )
     _PARSE_TEMP_RE = re.compile(
-        r"\s*document\.mainForm\._(?P<key>[A-Z1-3]+_SET|COOKHOLD)\.value = TempPICToHTML\((?P<value>\d+),0\);}?$"
+        r"\s*document\.mainForm\._(?P<key>[A-Z1-3]+_SET|COOKHOLD)\.value"
+        r" = TempPICToHTML\((?P<value>\d+),0\);}?$"
     )
     _MAC_RE = re.compile(r"\b(?P<mac>([A-Z0-9]{2}:){5}[A-Z0-9]{2})\b")
     _VERSIONS_RE = re.compile(
         r"FW Version<.*>(?P<sw_version>[0-9\.]+),\s*(?P<hw_version>[0-9\.]+)<"
     )
-    _SETTINGS_TEMP = ["COOK_SET", "FOOD1_SET", "FOOD2_SET", "FOOD3_SET"]
-    _SETTINGS_NAME = ["COOK_NAME", "FOOD1_NAME", "FOOD2_NAME", "FOOD3_NAME"]
-    _UPDATE_TEMP = ["COOK_TEMP", "FOOD1_TEMP", "FOOD2_TEMP", "FOOD3_TEMP"]
-    _UPDATE_STATUS = ["COOK_STATUS", "FOOD1_STATUS", "FOOD2_STATUS", "FOOD3_STATUS"]
     _NAME_RE = re.compile(r"^[\w ]+$")
 
     mac: str = ""
@@ -478,7 +471,6 @@ class CyberqDevice:
         self, host: str, session: aiohttp.ClientSession, port: int = 80
     ) -> None:
         """Init the CyberQ."""
-
         self._session = session
         self.host = host
         self.port = port
@@ -492,21 +484,18 @@ class CyberqDevice:
 
     async def _post(self, url: str, data: dict) -> str:
         """Update a value."""
-
         async with self._session.post(url, data=data) as response:
             response.raise_for_status()
             return await response.text()
 
     async def _get(self, url: str) -> str:
         """Get a response data."""
-
         async with self._session.get(url) as response:
             response.raise_for_status()
             return await response.text()
 
     async def _wifi(self) -> None:
         """Read WiFi config page."""
-
         text = await self._get(self._wifi_url)
         for line in text.split("\r\n"):
             match = self._MAC_RE.search(line)
@@ -521,7 +510,6 @@ class CyberqDevice:
 
     def _parse_html(self, response: str) -> None:
         """Parse the HTML response."""
-
         _LOGGER.debug("Cyberq._parse_html")
         for line in response.split("\r\n"):
             match = self._PARSE_VALUE_RE.match(line)
@@ -544,7 +532,6 @@ class CyberqDevice:
 
     async def _config(self, response: str | None = None) -> None:
         """Read config data."""
-
         xml_config = None
         if self.mac == "":
             try:
@@ -606,18 +593,14 @@ class CyberqDevice:
             _LOGGER.debug("%s _config w/response", self.serial_number)
             self._parse_html(response)
 
-        self._last_config = datetime.datetime.now()
+        self._last_config = datetime.datetime.now(tz=datetime.UTC)
 
     async def async_set(self, key: str, value: Any) -> bool:
         """Set a value from user input."""
-
         _LOGGER.debug("Setting %s %s", key, value)
         sensor = getattr(self._sensors, key)
         _value = sensor.export(value)
-        if self.cyberq_cloud and sensor.alias is not None:
-            _key = sensor.alias
-        else:
-            _key = key
+        _key = sensor.alias if self.cyberq_cloud and sensor.alias is not None else key
 
         _LOGGER.warning("Cyberq.async_set(%s, %s)", _key, _value)
 
@@ -626,22 +609,16 @@ class CyberqDevice:
         )
         await self._config(response)
 
-        # Force a re-read of config
-        # self._last_config = None
-
         return True
 
     async def async_update(self) -> CyberqSensors:
         """Refresh the data."""
-
         self._sensors = copy.deepcopy(self._sensors)
 
         # Read config every 10 minutes
-        if (
-            self._last_config is None
-            or self._last_config + datetime.timedelta(minutes=10)
-            < datetime.datetime.now()
-        ):
+        if self._last_config is None or self._last_config + datetime.timedelta(
+            minutes=10
+        ) < datetime.datetime.now(tz=datetime.UTC):
             await self._config()
 
         response = await self._get(self._status_url)
@@ -662,7 +639,7 @@ class CyberqDevice:
             itemp = float(temp)
         except ValueError:
             return False
-        return 32.0 <= itemp <= 475.0
+        return CYBERQ_TEMPERATURE_MIN <= itemp <= CYBERQ_TEMPERATURE_MAX
 
     @property
     def sensors(self) -> CyberqSensors:
@@ -681,7 +658,6 @@ class CyberqDevice:
 
     def __str__(self) -> str:
         """Return a string representation of the CyberQ."""
-
         return f"Cyberq {self._base_url}: serial {self.serial_number} MAC: {self.mac}"
 
 
@@ -690,7 +666,6 @@ if __name__ == "__main__":
 
     def parse_args() -> argparse.Namespace:
         """Parse command line arguments."""
-
         parser = argparse.ArgumentParser(description="Send pushbullet messages")
 
         # Debugging
@@ -763,8 +738,6 @@ if __name__ == "__main__":
 
     def init_logging(options: argparse.Namespace) -> None:
         """Set up logging, based on command line options."""
-
-        _LOGGER = logging.getLogger()
         _LOGGER.handlers = []
         handler = logging.StreamHandler()
         handler.setFormatter(
@@ -783,7 +756,6 @@ if __name__ == "__main__":
 
     async def main() -> None:
         """Test function."""
-
         options = parse_args()
 
         async with aiohttp.ClientSession(

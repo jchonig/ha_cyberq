@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import logging
+from collections.abc import Mapping
 
 from homeassistant.components.text import ENTITY_ID_FORMAT, TextEntity
 from homeassistant.const import EntityCategory
