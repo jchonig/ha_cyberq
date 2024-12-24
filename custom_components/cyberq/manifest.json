@@ -7,10 +7,10 @@
   "documentation": "https://github.com/jchonig/ha_cyberq",
   "homekit": {},
   "integration_type": "device",
-  "issue_tracker": "https://github.com/jchonig/ha_cyberq/issues",
   "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/jchonig/ha_cyberq/issues",
   "requirements": ["xmltodict==0.13.0"],
   "ssdp": [],
-  "zeroconf": [],
-  "version": "0.1.5"
+  "version": "0.1.5",
+  "zeroconf": []
 }
