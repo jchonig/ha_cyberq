@@ -1,9 +1,7 @@
-name: "Release"
+name: "Release-Sub"
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_call:
 
 permissions: {}
 
