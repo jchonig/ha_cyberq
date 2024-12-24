@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Final
 
 from homeassistant.components.climate import (
     ENTITY_ID_FORMAT,
@@ -81,7 +81,7 @@ class CyberqClimate(CoordinatorEntity[CyberqDataUpdateCoordinator], ClimateEntit
     _attr_should_poll = False
     _attr_hvac_action = None
     _attr_hvac_mode = HVACMode.HEAT
-    _attr_hvac_modes = HVACMode.HEAT
+    _attr_hvac_modes: Final = (HVACMode.HEAT,)
     _attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE
     _attr_prescision = PRECISION_TENTHS
     _attr_temperature_unit = UnitOfTemperature.FAHRENHEIT
@@ -105,8 +105,12 @@ class CyberqClimate(CoordinatorEntity[CyberqDataUpdateCoordinator], ClimateEntit
         self._cyberq_status_key = cyberq_status_key
         self._attr_translation_key = "probe"
         self._attr_translation_placeholders = translation_placeholders
-        self._attr_max_temp = float(str(CYBERQ_SENSORS[self._cyberq_setpoint_key].max))
-        self._attr_min_temp = float(str(CYBERQ_SENSORS[self._cyberq_setpoint_key].min))
+        self._attr_max_temp = float(
+            str(CYBERQ_SENSORS[self._cyberq_setpoint_key].max_value)
+        )
+        self._attr_min_temp = float(
+            str(CYBERQ_SENSORS[self._cyberq_setpoint_key].min_value)
+        )
 
         self._update_sub()
         self._attr_unique_id = f"{self.coordinator.device_info['name']}_{prefix}_probe"

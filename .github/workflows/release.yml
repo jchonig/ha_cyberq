@@ -1,9 +1,9 @@
 name: "Release"
 
 on:
-  release:
-    types:
-      - "published"
+  push:
+    tags:
+      - "v*.*.*"
 
 permissions: {}
 
@@ -14,16 +14,26 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: "Install tools"
+        run: sudo apt-get install -y jq
+
       - name: "Checkout the repository"
         uses: "actions/checkout@v4.2.2"
+
+      - name: "Update release version"
+        shell: "bash"
+        run: |
+          version="${{ github.ref_name }}"
+          cd "${{ github.workspace }}/custom_components/cyberq"
+          jq ".version = \"${version:1}\"" < manifest.json > manifest.json.new && mv manifest.json.new manifest.json
 
       - name: "ZIP the integration directory"
         shell: "bash"
         run: |
-          cd "${{ github.workspace }}/custom_components/integration_blueprint"
-          zip integration_blueprint.zip -r ./
+          cd "${{ github.workspace }}/custom_components/cyberq"
+          zip cyberq.zip -r ./
 
       - name: "Upload the ZIP file to the release"
-        uses: "softprops/action-gh-release@v2.2.0"
+        uses: "softprops/action-gh-release@v2"
         with:
-          files: ${{ github.workspace }}/custom_components/integration_blueprint/integration_blueprint.zip
+          files: ${{ github.workspace }}/custom_components/cyberq/cyberq.zip

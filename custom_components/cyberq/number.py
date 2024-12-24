@@ -118,8 +118,8 @@ class CyberqNumber(CoordinatorEntity[CyberqDataUpdateCoordinator], NumberEntity)
         self._attr_device_class = device_class
         self._attr_translation_key = translation_key
         self._attr_icon = icon
-        self._attr_native_min_value = CYBERQ_SENSORS[self._cyberq_name_key].min
-        self._attr_native_max_value = CYBERQ_SENSORS[self._cyberq_name_key].max
+        self._attr_native_min_value = CYBERQ_SENSORS[self._cyberq_name_key].min_value
+        self._attr_native_max_value = CYBERQ_SENSORS[self._cyberq_name_key].max_value
         self._attr_native_step = step
         self._attr_native_unit_of_measurement = unit_of_measurement
         self._attr_entity_registry_enabled_default = not disabled
