@@ -44,4 +44,4 @@ jobs:
     uses: "jchonig/ha_cyberq/.github/workflows/release_sub.yml@main"
     permissions:
       contents: write
-    if: startsWith(github.ref, 'refs/tags/v*.*.*')
+    if: startsWith(github.ref, 'refs/tags/v')
