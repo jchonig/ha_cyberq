@@ -133,6 +133,8 @@ class CyberqClimate(CoordinatorEntity[CyberqDataUpdateCoordinator], ClimateEntit
             self.coordinator.data, self._cyberq_status_key
         ).value in ("error", "shutdown"):
             self._attr_hvac_mode = HVACMode.OFF
+        else:
+            self._attr_hvac_mode = HVACMode.HEAT
         self._attr_icon = STATUS_ICONS[
             getattr(self.coordinator.data, self._cyberq_status_key).index
         ]
