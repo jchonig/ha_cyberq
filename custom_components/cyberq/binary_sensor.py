@@ -7,11 +7,13 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from homeassistant.components.binary_sensor import (
+    ENTITY_ID_FORMAT,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.entity import async_generate_entity_id
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -75,6 +77,9 @@ class CyberqBinarySensor(
         self._attr_icon = description.icon
         self._attr_unique_id = (
             f"{coordinator.device_info['serial_number']}_{description.key}"
+        )
+        self.entity_id = async_generate_entity_id(
+            ENTITY_ID_FORMAT, self.unique_id, hass=coordinator.hass
         )
         self.entity_description = description
 
