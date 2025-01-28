@@ -8,6 +8,7 @@ select = [
 ]
 
 ignore = [
+    "A005",   # select.py shadows a standard library
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
     "ARG001",
     "ARG002",
