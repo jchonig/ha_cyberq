@@ -401,7 +401,7 @@ class CyberqSensors:
         Prevents __getattr__ from recursing as new struct is created.
         """
         new = CyberqSensors()
-        new._sensors = copy.deepcopy(self._sensors)  # noqa: SLF001
+        new._sensors = copy.deepcopy(self._sensors)
         return new
 
     def __eq__(self, other: object) -> bool:
