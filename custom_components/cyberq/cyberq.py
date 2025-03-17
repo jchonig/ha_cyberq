@@ -772,15 +772,15 @@ if __name__ == "__main__":
                 sleep = 1.0
                 try:
                     sensors = await cyberq.async_update()
-                    logging.info("%s: %s", cyberq.serial_number, str(sensors))
+                    _LOGGER.info("%s: %s", cyberq.serial_number, str(sensors))
                 except TimeoutError:
-                    logging.warning("Timeout")
+                    _LOGGER.warning("Timeout")
                     sleep = 0
                 except (
                     aiohttp.client_exceptions.ClientConnectorError,
                     aiohttp.client_exceptions.ClientResponseError,
                 ) as error:
-                    logging.warning(error)
+                    _LOGGER.warning(error)
                     sleep = 10.0
                 await asyncio.sleep(sleep)
 
