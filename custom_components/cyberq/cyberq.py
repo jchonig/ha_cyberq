@@ -88,11 +88,19 @@ class CyberqSensor:
         """Return a string representation of the sensor."""
         return f"Name: {self.name} Type: {type(self).__name__} Value: {self.value}"
 
+    def __key(self) -> tuple:
+        """Key for __eq__ and __hash__."""
+        return (self.name, self.value)
+
+    def __hash__(self) -> int:
+        """Hash."""
+        return hash(self.__key())
+
     def __eq__(self, other: object) -> bool:
         """Compare."""
         if isinstance(other, CyberqSensor):
-            return type(self) is type(other) and self.value == other.value
-        return False
+            return self.__key() == other.__key()
+        return NotImplemented
 
     @property
     def alias(self) -> str | None:
@@ -410,6 +418,10 @@ class CyberqSensors:
             return False
 
         return self._sensors == other._sensors
+
+    def __hash__(self) -> int:
+        """Hash."""
+        return hash(self._sensors)
 
     def __getattr__(self, key: str) -> Any:
         """Retrieve a sensor value."""
