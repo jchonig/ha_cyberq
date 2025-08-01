@@ -1,0 +1,140 @@
+blueprint:
+  name: CyberQ Alerts
+  domain: automation
+  source_url: https://github.com/jchonig/ha_cyberq/blob/main/blueprints/automation/cyberq.yaml
+  author: "Jeffrey Honig <jchonig@github.com>"
+  description: |
+    # CyberQ Notifications
+    Notify on state transitions of CyberQ WiFi and CyperQ Cloud pit and food probes.
+
+    #$ Instructions
+    1. Select the entities of the Pit(s) and Probe(s) to monitor.
+    2. Select the device to receive notifications.
+    3. (Optional) Select the target states.
+    4. Hit *Save*.
+    5. (Optional) Choose an unique name (if you will have multiple versions).
+
+    ## Notes
+    When one of the selected entities enters one of the target states, a notification will be sent to your device.
+
+    Multiple automations are using this blueprint are valid if are saved with different names.
+    Multiple automations will allow Different mobile devices to be notified about different states.
+
+    On Android, notifications are grouped by the CyberQ device and tagged by the probe so that only the last notification from a given probe is shown.
+    Notifications are also shown as alarms so that they will always be heard, even if the phone is on vibration.
+    This can be changed in the *Advanced Options* section.
+  input:
+    cyberq_entities:
+      name: CyberQ Device
+      selector:
+        entity:
+          integration: cyberq
+          domain: sensor
+          device_class: enum
+          multiple: true
+    notify_device:
+      name: Notification Device
+      description: |
+        The Device running the official Home Assistant app to receive notifications.
+      default: false
+      selector:
+        device:
+          integration: mobile_app
+    advanced:
+      name: Advanced Configuration
+      icon: mdi:cog
+      description: More advanced configuration options
+      collapsed: true
+      input:
+        cyberq_states:
+          name: States
+          description: |
+            Select one or more target states for notifications.
+          default:
+            - 'alarm'
+            - 'done'
+            - 'error'
+            - 'high'
+            - 'low'
+            - 'ok'
+          selector:
+            select:
+              multiple: true
+              custom_value: false
+              sort: true
+              mode: list
+              # From cyberq.py _STATUS_VALUES
+              options:
+                - "alarm"
+                - "done"
+                - "error"
+                - "high"
+                - "hold"
+                - "low"
+                - "ok"
+                - "shutdown"
+        cyberq_channel:
+          name: Android Notification Channel
+          description: |
+            Select the Android notification channel.
+
+            The default of *alarm_stream* will break through a muted or silenced phone.
+            This seems appropriate to avoid overcooking your food.
+
+            If you do not want this behaviour, specify `CyberQ' or your own channel name.
+          default: "alarm_stream"
+          selector:
+            select:
+              custom_value: true
+              sort: true
+              options:
+                - "CyberQ"
+                - "alarm_stream"
+
+variables:
+  cyberq_states: !input cyberq_states
+
+trigger:
+  - platform: state
+    entity_id: !input cyberq_entities
+    to: !input cyberq_states
+
+action:
+  - alias: "Send Notification"
+    device_id: !input notify_device
+    domain: mobile_app
+    type: notify
+    title: |
+      {% set probe_name = trigger.to_state.entity_id
+          |regex_replace('^sensor\.(.*)_status$', 'text.\\1_name')
+          |regex_replace('pit_name$', 'cook_name')
+      %}
+      {{ trigger.to_state.name|regex_replace(' status$', '') }}: {{ states(probe_name) }}: {{ trigger.to_state.state }}
+    message: |
+      {% set probe_id = trigger.to_state.entity_id
+          |regex_replace('^sensor\.(.*)_status$', 'climate.\\1_probe')
+          |regex_replace('_probe(\d)_probe$', '_food\\1_probe')
+      %}
+      {% set temp_unit = state_attr(probe_id, 'temperature_unit') or '°F' %}
+
+      Previous State: {{ trigger.from_state.state }}
+      Current Current: {{ state_attr(probe_id, 'current_temperature') }}{{ temp_unit }}
+      Target Temperature: {{ state_attr(probe_id, 'temperature') }}{{ temp_unit }}
+    data:
+      visibility: public
+      group: CyberQ
+      channel: !input cyberq_channel
+      importance: max
+      sticky: true
+      priority: high
+      ttl: 0
+      tag: "{{ trigger.to_state.entity_id }}"
+      notification_icon: |
+        {% set probe_id = trigger.to_state.entity_id
+           |regex_replace('^sensor\.(.*)_status$', 'climate.\\1_probe')
+           |regex_replace('_probe(\d)_probe$', '_food\\1_probe')
+        %}
+        {{ state_attr(probe_id, 'icon') }}
+      push:
+        thread-id: CyberQ
+        interruption-level: critical

@@ -77,6 +77,13 @@ The internal webserver of the CyberQ devices fetches data every 1
 second, however HomeAssistant has a lower limit on the update
 interval of 1 second.
 
+## Notifications
+
+Install the following blueprint to configure notifications from the
+CyberQ
+
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fjchonig%2Fha_cyberq%2Frefs%2Fheads%2Fmain%2Fblueprints%2Fautomation%2Fcyberq_alert.yaml)
+
 ## Known limitations
 
 See [Issues][issues]
@@ -112,7 +119,6 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [bbq_guru_support]: https://www.bbqguru.com/support/
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jchonig/ha_cyberq?style=for-the-badge
 [commits]: https://github.com/jchonig/ha_cyberq/commits/main
-[exampleimg]: example.png
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/t/cyberq-bbq-guru-cyberq-cloud-and-wi-fi-integration/815570
 [ha_cyberq]: https://github.com/jchonig/ha_cyberq
