@@ -104,7 +104,7 @@ class CyberqSelect(CoordinatorEntity[CyberqDataUpdateCoordinator], SelectEntity)
         except AttributeError:
             self._attr_current_option = None
         self._attr_unique_id = (
-            f"{self.coordinator.device_info['serial_number']}_{self.translation_key}"
+            f"{self.coordinator.device_info['name']}_{self.translation_key}"
         )
 
     @callback

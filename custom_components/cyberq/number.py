@@ -131,7 +131,7 @@ class CyberqNumber(CoordinatorEntity[CyberqDataUpdateCoordinator], NumberEntity)
         except AttributeError:
             self._attr_native_value = None
         self._attr_unique_id = (
-            f"{self.coordinator.device_info['serial_number']}_{translation_key}"
+            f"{self.coordinator.device_info['name']}_{translation_key}"
         )
 
     @callback

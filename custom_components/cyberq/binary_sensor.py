@@ -75,9 +75,7 @@ class CyberqBinarySensor(
         self._attr_device_info = coordinator.device_info
         self._attr_native_value = description.value_fn(coordinator.data)
         self._attr_icon = description.icon
-        self._attr_unique_id = (
-            f"{coordinator.device_info['serial_number']}_{description.key}"
-        )
+        self._attr_unique_id = f"{coordinator.device_info['name']}_{description.key}"
         self.entity_id = async_generate_entity_id(
             ENTITY_ID_FORMAT, self.unique_id, hass=coordinator.hass
         )

@@ -79,7 +79,7 @@ class CyberqSwitch(CoordinatorEntity[CyberqDataUpdateCoordinator], SwitchEntity)
 
         self._attr_translation_key = translation_key
         self._attr_icon = icon
-        self._attr_unique_id = f"{coordinator.device_info['serial_number']}_{key}"
+        self._attr_unique_id = f"{coordinator.device_info['name']}_{key}"
         self._cyberq_name_key = cyberq_name_key
         self._attr_entity_category = entity_category
         self._attr_available = hasattr(self.coordinator.data, self._cyberq_name_key)
