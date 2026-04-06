@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: "Checkout the repository"
-        uses: "actions/checkout@v5"
+        uses: "actions/checkout@v6"
 
       - name: "Update release version"
         shell: "bash"
@@ -34,7 +34,7 @@ jobs:
 
       - name: "Build Changelog"
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v5
+        uses: mikepenz/release-changelog-builder-action@v6
         with:
           mode: "HYBRID"
 
