@@ -1,0 +1,6 @@
+{
+  "exclude_contributors": [
+    "dependabot[bot]"
+  ],
+  "commitFilter": "^Merge (pull request|branch) "
+}

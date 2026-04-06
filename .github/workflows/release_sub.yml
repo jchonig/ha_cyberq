@@ -37,6 +37,7 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v6
         with:
           mode: "HYBRID"
+          configurationJson: "${{ github.workspace }}/.github/release-changelog-builder.json"
 
       - name: "Upload the ZIP file to the release"
         uses: "softprops/action-gh-release@v2"
