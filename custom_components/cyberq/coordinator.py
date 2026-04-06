@@ -4,6 +4,7 @@ import logging
 from asyncio import timeout
 from xml.parsers.expat import ExpatError
 
+import aiohttp
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -37,6 +38,11 @@ class CyberqDataUpdateCoordinator(DataUpdateCoordinator[CyberqSensors]):
             async with timeout(20):
                 data = await self._device.async_update()
                 _LOGGER.debug(str(data))
-        except (ExpatError, ConnectionError) as error:
+        except (
+            TimeoutError,
+            ExpatError,
+            ConnectionError,
+            aiohttp.ClientError,
+        ) as error:
             raise UpdateFailed(error) from error
         return data
