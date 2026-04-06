@@ -9,7 +9,7 @@
 	    }
 	},
 	"error": {
-	    "cannot_connect": "Unable to connect to the CyberQ defice.",
+	    "cannot_connect": "Unable to connect to the CyberQ device.",
 	    "unknown": "Unknown error occurred."
 	},
 	"abort": {

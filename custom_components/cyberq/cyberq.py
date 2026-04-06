@@ -180,7 +180,7 @@ class CyberqSensorList(CyberqSensor):
         """Return a string representation of the sensor."""
         return (
             f"Name: {self.name} Type: {type(self).__name__} "
-            r"Value: {self.value} Index: {self.index}"
+            f"Value: {self.value} Index: {self.index}"
         )
 
     @property

@@ -66,7 +66,7 @@ SENSOR_TYPES: tuple[CyberqSensorEntityDescription, ...] = (
         translation_key="cook_status",
         translation_placeholders={"cook_name": "Probe 2"},
         value=lambda data: data.FOOD2_STATUS.value,
-        icon_fn=lambda data: STATUS_ICONS.get(data.FOOD3_STATUS.index),
+        icon_fn=lambda data: STATUS_ICONS.get(data.FOOD2_STATUS.index),
         device_class=SensorDeviceClass.ENUM,
         options=CYBERQ_SENSORS["FOOD2_STATUS"].values,
     ),

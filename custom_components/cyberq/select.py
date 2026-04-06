@@ -29,7 +29,7 @@ async def async_setup_entry(
             CyberqSelect(
                 coordinator,
                 key="Ramp Probe",
-                translation_key="ramp_probe",
+                translation_key="cook_ramp",
                 icon="mdi:thermometer-lines",
                 cyberq_name_key="COOK_RAMP",
                 options=CYBERQ_SENSORS["COOK_RAMP"].values,
@@ -37,7 +37,7 @@ async def async_setup_entry(
             CyberqSelect(
                 coordinator,
                 key="Display degree units",
-                translation_key="display_degree_units",
+                translation_key="deg_units",
                 icon="mdi:thermometer",
                 cyberq_name_key="DEG_UNITS",
                 options=CYBERQ_SENSORS["DEG_UNITS"].values,
