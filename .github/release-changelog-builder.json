@@ -1,6 +1,14 @@
 {
-  "exclude_contributors": [
-    "dependabot[bot]"
+  "label_extractor": [
+    {
+      "pattern": "^Merge branch ",
+      "target": "merge-commit",
+      "on_property": "title",
+      "method": "match"
+    }
   ],
-  "commitFilter": "^Merge (pull request|branch) "
+  "ignore_labels": [
+    "dependencies",
+    "merge-commit"
+  ]
 }
