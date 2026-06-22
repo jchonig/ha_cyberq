@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: "Checkout the repository"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@v7"
 
       - name: "Update release version"
         shell: "bash"
