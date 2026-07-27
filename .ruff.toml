@@ -20,6 +20,7 @@ ignore = [
     "N818",
     "PLR0912",
     "PLR0913",
+    "PLR0917", # Too many positional arguments
     "TC001",
     "TC002",
     "TC003",
