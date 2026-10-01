@@ -21,11 +21,13 @@ controllers as well as replace the need for the BBQ Guru Cloud.
 ## Supported Devices
 
 Only the following devices are supported by this integration.
+
 - CyberQ Cloud firmware version 4.08
 - CyberQ Cloud firmware version 1.7
 
 **This integration will set up the following platforms.**
 
+<!-- markdownlint-disable MD013 -->
 | Platform        | CyberQ sensors supported                                                                                 |
 |-----------------|----------------------------------------------------------------------------------------------------------|
 | `binary_sensor` | `FAN_SHORTED`                                                                                            |
@@ -35,6 +37,7 @@ Only the following devices are supported by this integration.
 | `sensor`        | `FAN_SPEED`, `COOK_STATUS`, `FOOD1_STATUS`, `FOOD2_STATUS`, `FOOD3_STATUS`, `TIMER_STATUS`, `TIMER_CURR` |
 | `switch`        | `OPENDETECT`, `MENU_SCROLLING`, `KEY_BEEPS`                                                              |
 | `text`          | `COOK_NAME`, `FOOD1_NAME`, `FOOD2_NAME`, `FOOD3_NAME`                                                    |
+<!-- markdownlint-enable MD013 -->
 
 ## Installation
 
@@ -50,10 +53,13 @@ Install this integration with the following button:
 
 ### Manual installation
 
-1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
-1. If you do not have a `custom_components` directory (folder) there, you need to create it.
+1. Using the tool of choice open the directory (folder) for your HA
+   configuration (where you find `configuration.yaml`).
+1. If you do not have a `custom_components` directory (folder) there,
+   you need to create it.
 1. In the `custom_components` directory (folder) create a new folder called `cyberq`.
-1. Download _all_ the files from the `custom_components/cyberq/` directory (folder) in this repository.
+1. Download _all_ the files from the `custom_components/cyberq/`
+   directory (folder) in this repository.
 1. Place the files you downloaded in the new directory (folder) you created.
 1. Restart Home Assistant
 1. In the HA UI go to "Configuration" -> "Integrations" click "+" and
@@ -66,7 +72,7 @@ Support Pages][bbq_guru_support] to connect your device to your WiFi
 network in Infrastructure Mode.
 1. Make note of the IP address and port number (defaults to 80) of
    your CyberQ.
-   
+
 {% include integrations/config_flow.md %}
 
 ## Data updates
@@ -94,7 +100,8 @@ This integration follows standard integration removal. No extra steps are requir
 
 {% include integrations/remove_device_service.md %}
 
-After deleting the integration, go to the app of the manufacturer and remove the Home Assistant integration from there as well.
+After deleting the integration, go to the app of the manufacturer and
+remove the Home Assistant integration from there as well.
 
 ## Screenshots
 
@@ -109,7 +116,7 @@ After deleting the integration, go to the app of the manufacturer and remove the
 
 <!---->
 
-## Contributions are welcome!
+## Contributions are welcome
 
 If you want to contribute to this please read the [Contribution guidelines](CONTRIBUTING.md)
 
