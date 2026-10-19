@@ -26,7 +26,7 @@ SOFTWARE.
 
 import asyncio
 import copy
-import datetime
+import datetime as dt
 import logging
 import re
 import sys
@@ -487,7 +487,7 @@ class CyberqDevice:
         self.host = host
         self.port = port
         self._base_url = f"http://{host}:{port}"
-        self._last_config: datetime.datetime | None = None
+        self._last_config: dt.datetime | None = None
 
         self._index_url = urllib.parse.urljoin(self._base_url, "index.htm")
         self._status_url = urllib.parse.urljoin(self._base_url, "status.xml")
@@ -605,7 +605,7 @@ class CyberqDevice:
             _LOGGER.debug("%s _config w/response", self.serial_number)
             self._parse_html(response)
 
-        self._last_config = datetime.datetime.now(tz=datetime.UTC)
+        self._last_config = dt.datetime.now(tz=dt.UTC)
 
     async def async_set(self, key: str, value: Any) -> bool:
         """Set a value from user input."""
@@ -628,9 +628,9 @@ class CyberqDevice:
         self._sensors = copy.deepcopy(self._sensors)
 
         # Read config every 10 minutes
-        if self._last_config is None or self._last_config + datetime.timedelta(
+        if self._last_config is None or self._last_config + dt.timedelta(
             minutes=10
-        ) < datetime.datetime.now(tz=datetime.UTC):
+        ) < dt.datetime.now(tz=dt.UTC):
             await self._config()
 
         response = await self._get(self._status_url)
