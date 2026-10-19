@@ -22,7 +22,7 @@ controllers as well as replace the need for the BBQ Guru Cloud.
 
 Only the following devices are supported by this integration.
 
-- CyberQ Cloud firmware version 4.08
+- CyberQ WiFi firmware version 4.08
 - CyberQ Cloud firmware version 1.7
 
 **This integration will set up the following platforms.**
@@ -73,7 +73,13 @@ network in Infrastructure Mode.
 1. Make note of the IP address and port number (defaults to 80) of
    your CyberQ.
 
-{% include integrations/config_flow.md %}
+## Configuration
+
+In the HA UI go to "Settings" -> "Devices & services", click "Add
+integration" and search for "CyberQ". Enter the following:
+
+- **Host**: the hostname or IP address of your CyberQ.
+- **Port**: the port the CyberQ web server listens on (defaults to 80).
 
 ## Data updates
 
@@ -92,16 +98,16 @@ CyberQ
 
 ## Known limitations
 
-See [Issues][issues]
+- The CyberQ Cloud and CyberQ WiFi are discontinued and will not
+  receive firmware updates. Only the firmware versions listed under
+  [Supported Devices](#supported-devices) are supported.
+
+See [Issues][issues] for other known problems.
 
 ## Removing the integration
 
-This integration follows standard integration removal. No extra steps are required.
-
-{% include integrations/remove_device_service.md %}
-
-After deleting the integration, go to the app of the manufacturer and
-remove the Home Assistant integration from there as well.
+This integration follows standard integration removal. No extra
+steps are required.
 
 ## Screenshots
 
