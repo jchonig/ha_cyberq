@@ -3,7 +3,7 @@
   "name": "BBQ Guru CyberQ Integration",
   "codeowners": ["@jchonig"],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": ["frontend", "http"],
   "documentation": "https://github.com/jchonig/ha_cyberq",
   "homekit": {},
   "integration_type": "device",
