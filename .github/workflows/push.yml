@@ -36,12 +36,12 @@ jobs:
   validate:
     needs:
       - ruff	# Ruff can make changes to the repo
-    uses: "jchonig/ha_cyberq/.github/workflows/validate_sub.yml@main"
+    uses: "./.github/workflows/validate_sub.yml"
   release:
     needs:
       - ruff
       - validate
-    uses: "jchonig/ha_cyberq/.github/workflows/release_sub.yml@main"
+    uses: "./.github/workflows/release_sub.yml"
     permissions:
       contents: write
     if: startsWith(github.ref, 'refs/tags/v')

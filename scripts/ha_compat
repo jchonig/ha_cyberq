@@ -1,0 +1,28 @@
+#!/bin/sh
+# Run scripts/ha_compat_check.py in a Docker container against a
+# Home Assistant release: minimum (hacs.json), latest or beta.
+#
+# Usage: scripts/ha_compat [minimum|latest|beta]
+# Set PYTHON to override the Python image version.
+
+set -e
+
+target="${1:-latest}"
+case "$target" in
+    minimum) python="${PYTHON:-3.13}" ;;
+    latest|beta) python="${PYTHON:-3.14}" ;;
+    *) echo "usage: $0 [minimum|latest|beta]" >&2; exit 2 ;;
+esac
+
+cd "$(dirname "$0")/.."
+
+docker run --rm -v "$PWD":/code:ro -w /code -e TARGET="$target" \
+    "python:$python" sh -ec '
+        pip install -q --root-user-action=ignore --disable-pip-version-check packaging
+        version=$(python3 scripts/ha_compat_check.py resolve "$TARGET")
+        echo "Installing Home Assistant $version"
+        pip install -q --root-user-action=ignore --disable-pip-version-check \
+            "homeassistant==$version" \
+            $(python3 -c "import json; print(*json.load(open(\"custom_components/cyberq/manifest.json\"))[\"requirements\"])")
+        python3 scripts/ha_compat_check.py check
+    '

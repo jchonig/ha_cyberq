@@ -27,3 +27,43 @@ jobs:
             category: "integration"
             # Remove this 'ignore' key when you have added brand images for your integration to https://github.com/home-assistant/brands
             # ignore: "brands"
+
+  ha-compat:
+    # Import the integration on the minimum Home Assistant version
+    # (hacs.json), the latest stable release and the latest beta, and
+    # fail on new deprecation notices. Beta failures don't fail the run.
+    name: "Home Assistant ${{ matrix.target }}"
+    runs-on: "ubuntu-latest"
+    continue-on-error: ${{ matrix.target == 'beta' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: "minimum"
+            python: "3.13"
+          - target: "latest"
+            python: "3.14"
+          - target: "beta"
+            python: "3.14"
+    steps:
+        - name: "Checkout the repository"
+          uses: "actions/checkout@v7"
+
+        - name: "Set up Python"
+          uses: actions/setup-python@v7.1.0
+          with:
+            python-version: ${{ matrix.python }}
+
+        - name: "Resolve Home Assistant version"
+          id: ha
+          run: |
+            python3 -m pip install packaging
+            echo "version=$(python3 scripts/ha_compat_check.py resolve ${{ matrix.target }})" >> "$GITHUB_OUTPUT"
+
+        - name: "Install Home Assistant ${{ steps.ha.outputs.version }}"
+          run: |
+            jq -r '.requirements[]' custom_components/cyberq/manifest.json |
+              xargs python3 -m pip install "homeassistant==${{ steps.ha.outputs.version }}"
+
+        - name: "Import the integration"
+          run: python3 scripts/ha_compat_check.py check

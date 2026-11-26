@@ -1,0 +1,9 @@
+# Home Assistant deprecation notices that scripts/ha_compat_check.py
+# reports as warnings instead of failing the build. Each line is a
+# substring matched against the notice. Remove a line once the code
+# is migrated.
+#
+# Climate native_* attributes (HA 2026.11, removed in 2027.11). Migrating
+# requires raising the minimum Home Assistant version to 2026.11.0,
+# where the native_* attributes were introduced.
+CyberqClimate provides the deprecated _attr_temperature_unit
