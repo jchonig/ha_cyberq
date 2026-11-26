@@ -31,14 +31,19 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
+from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
 from .coordinator import CyberqDataUpdateCoordinator
 from .cyberq import CyberqDevice
+from .strategy import async_register_frontend
 
 _LOGGER = logging.getLogger(__name__)
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 PLATFORMS: list[Platform] = [
@@ -52,6 +57,12 @@ PLATFORMS: list[Platform] = [
 ]
 
 type CyberqConfigEntry = ConfigEntry[CyberqDataUpdateCoordinator]
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Serve the CyberQ dashboard strategy, once for all devices."""
+    await async_register_frontend(hass)
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: CyberqConfigEntry) -> bool:

@@ -96,6 +96,44 @@ CyberQ
 
 [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fjchonig%2Fha_cyberq%2Frefs%2Fheads%2Fmain%2Fblueprints%2Fautomation%2Fcyberq_alert.yaml)
 
+## Dashboard
+
+The integration includes a dashboard strategy that builds one view
+per CyberQ: a temperature graph, a card each for the cook and the
+plugged-in probes, the fan speed, and settings. The integration
+loads it automatically; no Lovelace resource is needed.
+
+To add the dashboard:
+
+1. Go to **Settings** → **Dashboards** → **Add dashboard** → **New
+   dashboard from scratch**, and give it a title and icon.
+2. Open the new dashboard, select the pencil (edit), then the
+   three-dot menu → **Raw configuration editor**.
+3. Replace the contents with the following and save:
+
+```yaml
+strategy:
+  type: custom:cyberq
+```
+
+Each view is titled with the device name and its area. The cards
+work with core Home Assistant alone, and use these frontend cards
+when they are installed:
+
+- [Mushroom](https://github.com/piitaya/lovelace-mushroom): one
+  card per cook and probe with the assigned name, status, and the
+  temperature colored by how close it is to the setpoint. Select
+  the card to open the thermostat; select the icon or hold the
+  card to rename it.
+- [ApexCharts Card](https://github.com/RomRider/apexcharts-card):
+  graph with time and temperature axes and dashed setpoint lines.
+  Without it, [mini-graph-card](https://github.com/kalkih/mini-graph-card)
+  is used, or the core history graph.
+
+Probes that are unplugged when the dashboard loads are left out,
+and the card widths are chosen for the number of probes in use.
+Reload the dashboard after plugging in or removing a probe.
+
 ## Known limitations
 
 - The CyberQ Cloud and CyberQ WiFi are discontinued and will not
