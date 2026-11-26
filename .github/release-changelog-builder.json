@@ -1,14 +1,23 @@
 {
-  "label_extractor": [
+  "categories": [
     {
-      "pattern": "^Merge branch ",
-      "target": "merge-commit",
-      "on_property": "title",
-      "method": "match"
+      "title": "## 🚀 Features",
+      "labels": ["enhancement"]
+    },
+    {
+      "title": "## 🐛 Fixes",
+      "labels": ["bug"]
+    },
+    {
+      "title": "## 📝 Documentation",
+      "labels": ["documentation"]
+    },
+    {
+      "title": "## 🔧 Changes",
+      "labels": []
     }
   ],
   "ignore_labels": [
-    "dependencies",
-    "merge-commit"
+    "dependencies"
   ]
 }

@@ -9,4 +9,4 @@ concurrency:
 
 jobs:
   validate:
-    uses: "jchonig/ha_cyberq/.github/workflows/validate_sub.yml@main"
+    uses: "./.github/workflows/validate_sub.yml"
