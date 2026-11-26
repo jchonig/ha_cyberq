@@ -31,12 +31,11 @@ from typing import Any, Final
 
 from homeassistant.components.climate import (
     ENTITY_ID_FORMAT,
-    PRECISION_TENTHS,
     ClimateEntity,
     ClimateEntityFeature,
     HVACMode,
 )
-from homeassistant.const import UnitOfTemperature
+from homeassistant.const import PRECISION_TENTHS, UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity import async_generate_entity_id
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
