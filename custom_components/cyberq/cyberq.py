@@ -31,6 +31,7 @@ import logging
 import re
 import sys
 import urllib.parse
+from collections.abc import Mapping
 from enum import StrEnum
 from typing import Any, Final, Self
 
@@ -609,19 +610,37 @@ class CyberqDevice:
 
     async def async_set(self, key: str, value: Any) -> bool:
         """Set a value from user input."""
-        _LOGGER.debug("Setting %s %s", key, value)
-        sensor = getattr(self._sensors, key)
-        _value = sensor.export(value)
-        _key = sensor.alias if self.cyberq_cloud and sensor.alias is not None else key
-
-        _LOGGER.warning("Cyberq.async_set(%s, %s)", _key, _value)
-
-        response = await self._post(
-            urllib.parse.urljoin(self._base_url, sensor.page), data={_key: _value}
-        )
-        await self._config(response)
-
+        await self.async_set_many({key: value})
         return True
+
+    async def async_set_many(self, values: Mapping[str, Any]) -> None:
+        """
+        Set several values from user input.
+
+        The CyberQ handles one request at a time, so values on the same
+        page are sent in one POST, and the config is read back once.
+        """
+        pages: dict[str, dict[str, Any]] = {}
+        for key, value in values.items():
+            _LOGGER.debug("Setting %s %s", key, value)
+            sensor = getattr(self._sensors, key)
+            _value = sensor.export(value)
+            _key = (
+                sensor.alias if self.cyberq_cloud and sensor.alias is not None else key
+            )
+            _LOGGER.warning("Cyberq.async_set(%s, %s)", _key, _value)
+            pages.setdefault(sensor.page, {})[_key] = _value
+
+        for page, data in pages.items():
+            response = await self._post(
+                urllib.parse.urljoin(self._base_url, page), data=data
+            )
+            # The Cloud's reply is the updated page; the WiFi re-reads
+            # config.xml, once below.
+            if self.cyberq_cloud:
+                await self._config(response)
+        if not self.cyberq_cloud:
+            await self._config()
 
     async def async_update(self) -> CyberqSensors:
         """Refresh the data."""

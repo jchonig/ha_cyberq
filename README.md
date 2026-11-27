@@ -89,6 +89,26 @@ The internal webserver of the CyberQ devices fetches data every 1
 second, however HomeAssistant has a lower limit on the update
 interval of 1 second.
 
+## Actions
+
+`cyberq.reset_cook` sets the cook and probe names back to Cook,
+Food1, Food2 and Food3, and the ramp probe to None, ready for the
+next cook. The CyberQ needs a name of at least one character, so
+names are reset to these defaults rather than cleared.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `device_id` | yes | The CyberQ to reset |
+
+```yaml
+action: cyberq.reset_cook
+data:
+  device_id: 0123456789abcdef0123456789abcdef
+```
+
+The CyberQ handles one request at a time, so the action sends all
+the names in one request and the ramp probe in a second one.
+
 ## Notifications
 
 Install the following blueprint to configure notifications from the
@@ -116,9 +136,15 @@ strategy:
   type: custom:cyberq
 ```
 
-Each view is titled with the device name and its area. The cards
-work with core Home Assistant alone, and use these frontend cards
-when they are installed:
+Each view is titled with the device name and its area. The cook
+and probe names and the other settings are on the **Settings**
+card, which folds to its title; select the title to open or close
+it. Each browser remembers whether it is open. **Reset** on that
+card runs the [`cyberq.reset_cook`](#actions) action; press it
+again within five seconds to confirm.
+
+The cards work with core Home Assistant alone, and use these
+frontend cards when they are installed:
 
 - [Mushroom](https://github.com/piitaya/lovelace-mushroom): one
   card per cook and probe with the assigned name, status, and the
@@ -129,6 +155,9 @@ when they are installed:
   graph with time and temperature axes and dashed setpoint lines.
   Without it, [mini-graph-card](https://github.com/kalkih/mini-graph-card)
   is used, or the core history graph.
+
+Tips at the bottom of the view explain the card gestures and name
+any of these cards that are not installed from the Marketplace.
 
 Probes that are unplugged when the dashboard loads are left out,
 and the card widths are chosen for the number of probes in use.
@@ -149,14 +178,16 @@ steps are required.
 
 ## Screenshots
 
-- Sample dashboard
-![Sample Dashboard](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Dashboard.png)
-- Setting pit target temperature
-![Setting Pit Target Temperature](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Temperature.png)
-- Setting probe name
-![Setting Probe Name](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Name.png)
-- Selecting food for ramp function
-![Selecting Ramp Food](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Ramp.png)
+- The dashboard, with the Settings card collapsed
+![CyberQ dashboard](assets/CyberQ_Dashboard.png)
+- The Settings card open, with the cook and probe names
+![Settings card names](assets/CyberQ_Settings_Top.png)
+- The rest of the Settings card: ramp probe and Reset
+![Settings card ramp probe and Reset](assets/CyberQ_Settings_Bottom.png)
+- Setting a probe target temperature
+![Setting a probe target temperature](assets/CyberQ_Set_Probe_Temperature.png)
+- Renaming a probe
+![Renaming a probe](assets/CyberQ_Set_Probe_Name.png)
 
 <!---->
 

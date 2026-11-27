@@ -105,5 +105,28 @@
 		"name": "{probe_name} Name"
 	    }
 	}
+    },
+    "services": {
+	"reset_cook": {
+	    "name": "Reset cook",
+	    "description": "Sets the cook and probe names back to Cook, Food1, Food2 and Food3, and the ramp probe to None.",
+	    "fields": {
+		"device_id": {
+		    "name": "Device",
+		    "description": "The CyberQ to reset."
+		}
+	    }
+	}
+    },
+    "exceptions": {
+	"device_not_found": {
+	    "message": "No CyberQ device with ID {device_id}."
+	},
+	"device_not_loaded": {
+	    "message": "{device} is not loaded."
+	},
+	"write_failed": {
+	    "message": "Could not update the CyberQ: {error}"
+	}
     }
 }
