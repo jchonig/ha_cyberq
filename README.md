@@ -179,15 +179,15 @@ steps are required.
 ## Screenshots
 
 - The dashboard, with the Settings card collapsed
-![CyberQ dashboard](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Dashboard.png)
+![CyberQ dashboard](assets/CyberQ_Dashboard.png)
 - The Settings card open, with the cook and probe names
-![Settings card names](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Settings_Top.png)
+![Settings card names](assets/CyberQ_Settings_Top.png)
 - The rest of the Settings card: ramp probe and Reset
-![Settings card ramp probe and Reset](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Settings_Bottom.png)
+![Settings card ramp probe and Reset](assets/CyberQ_Settings_Bottom.png)
 - Setting a probe target temperature
-![Setting a probe target temperature](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Temperature.png)
+![Setting a probe target temperature](assets/CyberQ_Set_Probe_Temperature.png)
 - Renaming a probe
-![Renaming a probe](https://github.com/jchonig/ha_cyberq/blob/main/assets/CyberQ_Set_Probe_Name.png)
+![Renaming a probe](assets/CyberQ_Set_Probe_Name.png)
 
 <!---->
 
