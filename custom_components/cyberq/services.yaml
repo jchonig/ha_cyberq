@@ -1,0 +1,7 @@
+reset_cook:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: cyberq

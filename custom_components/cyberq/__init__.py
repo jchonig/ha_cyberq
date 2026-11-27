@@ -39,6 +39,7 @@ from homeassistant.helpers.typing import ConfigType
 from .const import DOMAIN
 from .coordinator import CyberqDataUpdateCoordinator
 from .cyberq import CyberqDevice
+from .services import async_setup_services
 from .strategy import async_register_frontend
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,7 +61,8 @@ type CyberqConfigEntry = ConfigEntry[CyberqDataUpdateCoordinator]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Serve the CyberQ dashboard strategy, once for all devices."""
+    """Register the service actions and serve the dashboard strategy."""
+    async_setup_services(hass)
     await async_register_frontend(hass)
     return True
 

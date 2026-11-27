@@ -17,6 +17,9 @@
 // The graph uses apexcharts-card if installed, else mini-graph-card,
 // else the core history graph. Probes unplugged when the view is built
 // are left out of the custom graphs.
+//
+// The cook and probe names and the settings are on a Settings card that
+// folds to its title (cyberq-collapsible-card, defined below).
 
 const CYBERQ_KEYS = [
     "pit_probe", "food1_probe", "food2_probe", "food3_probe",
@@ -138,7 +141,10 @@ function groupCard(opts) {
         } : {}),
         features: [{ type: "target-temperature" }],
         features_position: "bottom",
-        grid_options: { columns: 12 },
+        // A fixed height (Mushroom's own default for one feature) keeps
+        // the card from stretching to the tallest card in its row, such
+        // as an open Settings card.
+        grid_options: { columns: 12, rows: 2 },
     };
 }
 
@@ -207,7 +213,9 @@ class StrategyViewCyberq {
                 max_columns: 3,
                 sections: [
                     CyberqView.sectionGraph(e, hass, { apex, miniGraph }),
-                    CyberqView.sectionStatus(e, hass, temps),
+                    CyberqView.sectionStatus(e, hass, temps,
+                                             config.device_id),
+                    CyberqView.sectionHint(temps, { apex, miniGraph }),
                 ].filter((s) => s !== null),
             };
         } catch (error) {
@@ -363,8 +371,8 @@ class CyberqView {
                 statusEntity: e[statusKey], label, icon, band, unit,
             });
         }
+        // Names are edited on the Settings card.
         const rows = CyberqView.rows(e, [
-            { key: nameKey, name: `${label} Name`, type: "simple-entity" },
             { key: statusKey, name: "Status" },
             { key: climateKey, name: "Temperature" },
         ]);
@@ -381,7 +389,7 @@ class CyberqView {
     // A row is never split into fewer than three slots. A probe plugged
     // in later appears without resizing until the page is reloaded.
     // unit is null when Mushroom is unavailable: plain entity rows then.
-    static sectionStatus(e, hass, unit) {
+    static sectionStatus(e, hass, unit, deviceId) {
         const groups = [];
         const cook = CyberqView.cardGroup(e, unit, {
             label: "Cook", nameKey: "cook_name", statusKey: "pit_status",
@@ -395,7 +403,7 @@ class CyberqView {
             groups.push(card);
             if (CyberqView.probeNow(e, hass, i).plugged) plugged++;
         }
-        const extra = CyberqView.cardsSettings(e);
+        const extra = CyberqView.cardsSettings(e, deviceId);
         const shown = (cook ? 1 : 0) + plugged
             + (plugged < 2 ? extra.length : 0);
         const width = Math.floor(36 / Math.max(3, shown));
@@ -411,6 +419,38 @@ class CyberqView {
         return { type: "grid", column_span: 3, cards: cards };
     }
 
+    // Footer tips: the Mushroom card gestures when Mushroom is
+    // installed, and which Marketplace cards would improve the view.
+    static sectionHint(unit, cards) {
+        const tips = [];
+        if (unit) {
+            tips.push("Select a card to change its setpoint. Hold a card,"
+                + " or select its icon, to rename it. Names and settings"
+                + " are also on the Settings card.");
+        } else {
+            tips.push("Install **Mushroom** from the Marketplace for one"
+                + " card per cook and probe, colored by how close it is"
+                + " to the setpoint.");
+        }
+        if (!cards.apex) {
+            const now = cards.miniGraph ? "mini-graph-card" : "a basic graph";
+            tips.push("Install **ApexCharts Card** from the Marketplace for"
+                + " a graph with time and temperature axes and setpoint"
+                + ` lines (now using ${now}).`);
+        }
+        const content = tips.map((tip) => `Tip: ${tip}`).join("<br>");
+        return {
+            type: "grid",
+            column_span: 3,
+            cards: [{
+                type: "markdown",
+                text_only: true,
+                content: `<small>${content}</small>`,
+                grid_options: { columns: "full" },
+            }],
+        };
+    }
+
     static cardProbe(i, e, unit) {
         const card = CyberqView.cardGroup(e, unit, {
             label: `Probe ${i}`, nameKey: `probe${i}_name`,
@@ -420,6 +460,8 @@ class CyberqView {
         if (!card) return null;
         const status = e[`probe${i}_status`];
         if (!status) return card;
+        // The conditional card reports no size of its own, so give it the
+        // inner card's; without rows it stretches to fill its grid row.
         return {
             type: "conditional",
             conditions: [{
@@ -428,11 +470,13 @@ class CyberqView {
                 state_not: PROBE_OFF,
             }],
             card: card,
+            ...(card.grid_options ? { grid_options: card.grid_options } : {}),
         };
     }
 
-    // Fan speed graph and settings cards.
-    static cardsSettings(e) {
+    // Fan speed graph, and a collapsible Settings card with the cook and
+    // probe names followed by the other settings.
+    static cardsSettings(e, deviceId) {
         const cards = [];
         if (e.fan_speed) {
             cards.push({
@@ -445,16 +489,265 @@ class CyberqView {
                 grid_options: { rows: 3 },
             });
         }
-        const entities = CyberqView.rows(e, [
+        const names = CyberqView.rows(e, [
+            { key: "cook_name", name: "Cook" },
+            { key: "probe1_name", name: "Probe 1" },
+            { key: "probe2_name", name: "Probe 2" },
+            { key: "probe3_name", name: "Probe 3" },
+        ]);
+        const settings = CyberqView.rows(e, [
             { key: "cook_ramp", name: "Ramp Probe" },
             { key: "alarm_beeps", name: "Alarm Beeps" },
             { key: "timeout_action", name: "Timeout Action" },
         ]);
+        const entities = [
+            ...(names.length > 0
+                ? [{ type: "section", label: "Names" }, ...names] : []),
+            ...(names.length > 0 && settings.length > 0
+                ? [{ type: "divider" }] : []),
+            ...settings,
+            ...(deviceId
+                ? [{ type: "divider" },
+                   { type: "custom:cyberq-reset-row", device_id: deviceId }]
+                : []),
+        ];
         if (entities.length > 0) {
-            cards.push({ type: "entities", title: "Settings",
-                         entities: entities });
+            cards.push({
+                type: "custom:cyberq-collapsible-card",
+                title: "Settings",
+                storage_key: deviceId || "default",
+                card: { type: "entities", entities: entities },
+            });
         }
         return cards;
+    }
+}
+
+// Browser storage can be missing or throw (private windows, blocked
+// site data); the card then just starts collapsed.
+function readOpen(key) {
+    try {
+        return window.localStorage.getItem(key) === "1";
+    } catch (error) {
+        return false;
+    }
+}
+
+function writeOpen(key, open) {
+    try {
+        window.localStorage.setItem(key, open ? "1" : "0");
+    } catch (error) {
+        // Not remembered; nothing else to do.
+    }
+}
+
+// A card that folds to its title. Config: {title, storage_key, card},
+// where card is any card config, built with Home Assistant's card
+// helpers. Starts collapsed; the open state is remembered per
+// storage_key in this browser.
+class CyberqCollapsibleCard extends HTMLElement {
+    setConfig(config) {
+        if (!config || !config.card) {
+            throw new Error("card is required");
+        }
+        this._config = config;
+        this._key = `cyberq-collapsible-${config.storage_key || "default"}`;
+        this._open = readOpen(this._key);
+        this._inner = null;
+        this._render();
+    }
+
+    set hass(hass) {
+        this._hass = hass;
+        if (this._inner) this._inner.hass = hass;
+    }
+
+    getCardSize() {
+        if (!this._open) return 1;
+        const inner = this._inner && this._inner.getCardSize
+            ? this._inner.getCardSize() : 3;
+        return 1 + (typeof inner === "number" ? inner : 3);
+    }
+
+    getGridOptions() {
+        return { columns: 12, rows: "auto" };
+    }
+
+    _render() {
+        if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+        const root = this.shadowRoot;
+        root.innerHTML = `
+            <style>
+                .header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 12px 16px;
+                    cursor: pointer;
+                    user-select: none;
+                    font-size: var(--ha-card-header-font-size, 20px);
+                    color: var(--ha-card-header-color,
+                               var(--primary-text-color));
+                }
+                .header:focus-visible {
+                    outline: 2px solid var(--primary-color);
+                    outline-offset: -2px;
+                }
+                .body {
+                    --ha-card-border-width: 0;
+                    --ha-card-box-shadow: none;
+                    --ha-card-background: transparent;
+                    --ha-card-border-radius: 0;
+                }
+                .body[hidden] { display: none; }
+            </style>
+            <ha-card>
+                <div class="header" role="button" tabindex="0"></div>
+                <div class="body"></div>
+            </ha-card>`;
+        const header = root.querySelector(".header");
+        const title = document.createElement("span");
+        title.textContent = this._config.title || "";
+        this._chevron = document.createElement("ha-icon");
+        header.append(title, this._chevron);
+        header.addEventListener("click", () => this._toggle());
+        header.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter" || ev.key === " ") {
+                ev.preventDefault();
+                this._toggle();
+            }
+        });
+        this._header = header;
+        this._body = root.querySelector(".body");
+        this._update();
+    }
+
+    _toggle() {
+        this._open = !this._open;
+        writeOpen(this._key, this._open);
+        this._update();
+    }
+
+    _update() {
+        this._header.setAttribute("aria-expanded", String(this._open));
+        this._chevron.setAttribute("icon", this._open
+            ? "mdi:chevron-up" : "mdi:chevron-down");
+        this._body.hidden = !this._open;
+        if (this._open && !this._inner) this._build();
+    }
+
+    async _build() {
+        const config = this._config;
+        const helpers = await window.loadCardHelpers();
+        if (this._config !== config || this._inner) return;
+        const inner = helpers.createCardElement(config.card);
+        if (this._hass) inner.hass = this._hass;
+        this._inner = inner;
+        this._body.append(inner);
+    }
+}
+
+// Entities card row that resets the cook and probe names and turns off
+// the ramp with the cyberq.reset_cook action. Config: {device_id}. The
+// first press asks for confirmation on the button itself; a second
+// press within five seconds resets.
+class CyberqResetRow extends HTMLElement {
+    setConfig(config) {
+        this._config = config;
+        this._armed = false;
+        this._busy = false;
+        this._render();
+    }
+
+    set hass(hass) {
+        this._hass = hass;
+    }
+
+    _render() {
+        if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+        this.shadowRoot.innerHTML = `
+            <style>
+                .row {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    min-height: 40px;
+                }
+                ha-icon {
+                    color: var(--state-icon-color,
+                               var(--paper-item-icon-color));
+                    flex: none;
+                    width: 40px;
+                    display: flex;
+                    justify-content: center;
+                }
+                .label { flex: 1; }
+                button {
+                    font: inherit;
+                    border: none;
+                    border-radius: 18px;
+                    padding: 6px 16px;
+                    cursor: pointer;
+                    color: var(--primary-color);
+                    background: transparent;
+                }
+                button.armed {
+                    color: var(--text-primary-color, #fff);
+                    background: var(--error-color, #db4437);
+                }
+                button:disabled { opacity: 0.5; cursor: default; }
+            </style>
+            <div class="row">
+                <ha-icon icon="mdi:restore"></ha-icon>
+                <span class="label">Reset names and ramp</span>
+                <button type="button"></button>
+            </div>`;
+        this._button = this.shadowRoot.querySelector("button");
+        this._button.addEventListener("click", () => this._press());
+        this._update();
+    }
+
+    _update() {
+        this._button.textContent = this._busy ? "Resetting…"
+            : this._armed ? "Confirm"
+            : this._failed ? "Failed, see browser log" : "Reset";
+        this._button.classList.toggle("armed", this._armed);
+        this._button.disabled = this._busy;
+    }
+
+    async _press() {
+        if (!this._hass || this._busy) return;
+        if (!this._armed) {
+            this._armed = true;
+            this._failed = false;
+            this._update();
+            clearTimeout(this._timer);
+            this._timer = setTimeout(() => {
+                this._armed = false;
+                this._update();
+            }, 5000);
+            return;
+        }
+        clearTimeout(this._timer);
+        this._armed = false;
+        this._busy = true;
+        this._update();
+        try {
+            await this._hass.callService(
+                "cyberq", "reset_cook", { device_id: this._config.device_id });
+            this._failed = false;
+        } catch (error) {
+            console.error("CyberQ reset failed:", error);
+            this._failed = true;
+        }
+        if (this._failed) {
+            this._timer = setTimeout(() => {
+                this._failed = false;
+                this._update();
+            }, 5000);
+        }
+        this._busy = false;
+        this._update();
     }
 }
 
@@ -465,4 +758,10 @@ if (!customElements.get("ll-strategy-dashboard-cyberq")) {
 }
 if (!customElements.get("ll-strategy-view-cyberq")) {
     customElements.define("ll-strategy-view-cyberq", StrategyViewCyberq);
+}
+if (!customElements.get("cyberq-reset-row")) {
+    customElements.define("cyberq-reset-row", CyberqResetRow);
+}
+if (!customElements.get("cyberq-collapsible-card")) {
+    customElements.define("cyberq-collapsible-card", CyberqCollapsibleCard);
 }
